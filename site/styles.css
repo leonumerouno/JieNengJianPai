@@ -24,8 +24,7 @@ body{
   position: relative;
   height: 44vh;
   min-height: 360px;
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(180deg, #1a2744 0%, #0b1220 100%);
   border-bottom: 1px solid rgba(255,255,255,.08);
   display:flex;align-items:center;justify-content:center;
 }

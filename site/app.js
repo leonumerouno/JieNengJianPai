@@ -15,11 +15,13 @@
   const pageNextBtn = $('#pageNext')
   const pageInfo = $('#pageInfo')
 
+  const PRESET = {
+    warn: -0.372,
+    danger: 6.94,
+    window: 180
+  }
+
   const inputs = {
-    warn: $('#warnThreshold'),
-    danger: $('#dangerThreshold'),
-    roc: $('#rocThreshold'),
-    window: $('#windowSize'),
     alarmToggle: $('#alarmToggle'),
     resetBtn: $('#resetBtn'),
     clearLogBtn: $('#clearLogBtn')
@@ -29,7 +31,7 @@
     connected: false,
     points: [],
     timestamps: [],
-    base: 70,
+    base: -2,
     timer: null,
     chart: null,
     lastAlarmAt: 0,
@@ -73,13 +75,10 @@
     } catch { /* ignore */ }
   }
 
-  function classify(current, rate) {
-    const warn = parseFloat(inputs.warn.value)
-    const danger = parseFloat(inputs.danger.value)
-    const rocTh = parseFloat(inputs.roc.value)
-    if (!Number.isFinite(current) || !Number.isFinite(rate)) return 'unknown'
-    if (current >= danger || Math.abs(rate) >= rocTh * 1.2) return 'danger'
-    if (current >= warn || Math.abs(rate) >= rocTh) return 'warn'
+  function classify(current) {
+    if (!Number.isFinite(current)) return 'unknown'
+    if (current > 6.94) return 'danger'
+    if (current >= -0.372) return 'warn'
     return 'ok'
   }
 
@@ -99,7 +98,7 @@
     }
   }
 
-  function maybeAlarm(level, current, rate) {
+  function maybeAlarm(level, current) {
     if (level !== 'danger') {
       alarmBanner.classList.remove('show')
       return
@@ -108,7 +107,7 @@
     const now = Date.now()
     if (inputs.alarmToggle.checked && now - state.lastAlarmAt > 1500) {
       state.lastAlarmAt = now
-      addLog('danger', `P=${fmt(current)} kPa, dP/dt=${fmt(rate)} kPa/min`)
+      addLog('danger', `压力值 ${fmt(current)} kPa 已达危险阈值`)
       beep()
       document.title = '⚠️ 危险 - 山地浅层滑坡预警'
     }
@@ -116,8 +115,8 @@
 
   function ensureChart() {
     const ctx = document.getElementById('pressureChart').getContext('2d')
-    const warn = parseFloat(inputs.warn.value)
-    const danger = parseFloat(inputs.danger.value)
+    const warn = PRESET.warn
+    const danger = PRESET.danger
     state.chart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -174,8 +173,8 @@
 
   function recalcAndRender() {
     if (!state.chart) return
-    const warn = parseFloat(inputs.warn.value)
-    const danger = parseFloat(inputs.danger.value)
+    const warn = PRESET.warn
+    const danger = PRESET.danger
     const len = state.points.length
     state.chart.data.labels = state.timestamps
     state.chart.data.datasets[0].data = state.points
@@ -186,7 +185,7 @@
   }
 
   function simulateTick() {
-    const w = parseInt(inputs.window.value, 10) || 180
+    const w = PRESET.window
     const t = new Date()
     const last = state.points[state.points.length - 1] ?? state.base
     // random walk with occasional spikes
@@ -201,15 +200,13 @@
       state.timestamps.shift()
     }
     const prev = state.points.length > 1 ? state.points[state.points.length - 2] : next
-    // assume ~0.5s per tick -> rate to kPa/min
     const rate = (next - prev) / (0.5/60)
     elCurr.textContent = fmt(next, 2)
     elRate.textContent = fmt(rate, 1)
-    const level = classify(next, rate)
+    const level = classify(next)
     updatePill(level)
-    maybeAlarm(level, next, rate)
+    maybeAlarm(level, next)
     recalcAndRender()
-    state._lastRate = rate
   }
 
   function resetData() {
@@ -246,15 +243,6 @@
     ensureChart()
     inputs.resetBtn.addEventListener('click', resetData)
     inputs.clearLogBtn.addEventListener('click', () => { log.innerHTML = '' })
-    ;[inputs.warn, inputs.danger].forEach(inp => {
-      inp.addEventListener('change', () => {
-        addLog('warn', `阈值更新：预警=${inputs.warn.value} / 危险=${inputs.danger.value} kPa`)
-        recalcAndRender()
-      })
-    })
-    ;[inputs.roc, inputs.window].forEach(inp => {
-      inp.addEventListener('change', () => addLog('warn', `参数更新：Δ=${inputs.roc.value} kPa/min，窗口=${inputs.window.value}`))
-    })
     if (state.timer) clearInterval(state.timer)
     state.timer = setInterval(simulateTick, 500)
 

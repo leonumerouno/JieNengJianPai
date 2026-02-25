@@ -14,11 +14,10 @@
 </head>
 
 <body>
-  <header class="hero" style="background-image: url('./assets/images/image4.png');">
+  <header class="hero">
     <div class="hero__overlay"></div>
     <div class="hero__content">
-      <img class="hero__mark" src="./assets/images/image1.png" alt="项目标识" />
-      <h1>展示页 · 实时监测</h1>
+      <h1>实时监测</h1>
       <p>实时跟踪仪器压力数据 · 智能识别危险态势 · 自动预警</p>
       <div class="hero__stats">
         <div class="stat">
@@ -63,23 +62,16 @@
         <div class="panel__header">
           <h2>阈值与判定</h2>
         </div>
-        <div class="form">
-          <label class="form__row">
-            <span>预警阈值 (kPa)</span>
-            <input type="number" id="warnThreshold" step="0.1" value="80" />
-          </label>
-          <label class="form__row">
-            <span>危险阈值 (kPa)</span>
-            <input type="number" id="dangerThreshold" step="0.1" value="100" />
-          </label>
-          <label class="form__row">
-            <span>突变判定 Δ (kPa/min)</span>
-            <input type="number" id="rocThreshold" step="0.1" value="10" />
-          </label>
-          <label class="form__row">
-            <span>窗口大小 (点)</span>
-            <input type="number" id="windowSize" step="1" min="60" value="180" />
-          </label>
+        <div class="form" style="grid-template-columns: 1fr;">
+          <div class="form__row">
+            <span>正常: &lt; -0.372 kPa</span>
+          </div>
+          <div class="form__row">
+            <span>预警: -0.372 ~ 6.94 kPa</span>
+          </div>
+          <div class="form__row">
+            <span>危险: &gt; 6.94 kPa</span>
+          </div>
           <div class="form__row">
             <button id="resetBtn">重置数据</button>
             <label class="toggle">
@@ -87,10 +79,6 @@
               <span>启用报警</span>
             </label>
           </div>
-        </div>
-        <div class="explain">
-          <img src="./assets/images/image2.png" alt="监测示意" />
-          <p>判定规则：超过危险阈值或单位时间内变化速率超过阈值，视为危险；超过预警阈值视为预警。</p>
         </div>
       </div>
 
@@ -135,7 +123,7 @@
   </main>
 
   <div class="alarm-banner" id="alarmBanner">
-    <img src="./assets/images/image3.png" alt="警报图标" />
+    <span style="font-size:28px">⚠️</span>
     <div class="alarm-banner__text">
       <strong>危险！</strong> 检测到压力异常，已触发报警
     </div>
@@ -143,7 +131,6 @@
 
   <footer class="footer">
     <div>© 2026 山地浅层滑坡预防监测</div>
-    <div>界面参考自文档图片，视觉风格统一</div>
   </footer>
 
   <script src="./app.js"></script>
