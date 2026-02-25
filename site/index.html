@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>山地浅层滑坡预防监测平台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans SC', 'Microsoft Yahei', sans-serif;
+      background: linear-gradient(135deg, #1a1f35 0%, #0d1117 100%);
+      min-height: 100vh;
+      color: #e6e8eb;
+    }
+
+    .home-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    .logo-section {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .logo-section h1 {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo-section .subtitle {
+      font-size: 18px;
+      color: #8b949e;
+      letter-spacing: 2px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .card {
+      background: rgba(22, 27, 34, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 32px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #238636, #2ea043);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .card-icon.blue {
+      background: linear-gradient(135deg, #1f6feb, #388bfd);
+    }
+
+    .card h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: #f0f6fc;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #8b949e;
+      line-height: 1.6;
+    }
+
+    .action-section {
+      text-align: center;
+    }
+
+    .btn-enter {
+      display: inline-block;
+      padding: 16px 48px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #fff;
+      background: linear-gradient(90deg, #238636, #2ea043);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .btn-enter:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(35, 134, 54, 0.4);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 40px 0;
+      color: #484f58;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .logo-section h1 {
+        font-size: 28px;
+      }
+
+      .home-container {
+        padding: 40px 16px;
+      }
+
+      .card {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="home-container">
+    <div class="logo-section">
+      <h1>山地浅层滑坡预防监测平台</h1>
+      <p class="subtitle">实时监测 · 智能预警 · 安全保障</p>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon blue">📊</div>
+        <h3>实时数据展示</h3>
+        <p>动态展示压力传感器数据，实时更新监测曲线，随时掌握山体状态变化。</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚠️</div>
+        <h3>智能预警系统</h3>
+        <p>基于压力阈值和变化速率的智能判定，自动触发预警和危险警报。</p>
+      </div>
+      <div class="card">
+        <div class="card-icon blue">📋</div>
+        <h3>历史数据查询</h3>
+        <p>完整记录监测数据，支持历史查询和导出，便于分析和存档。</p>
+      </div>
+    </div>
+
+    <div class="action-section">
+      <a href="./monitor.html" class="btn-enter">进入监测系统</a>
+    </div>
+
+    <div class="footer">
+      <p>© 2026 山地浅层滑坡预防监测平台</p>
+    </div>
+  </div>
+</body>
+
+</html>

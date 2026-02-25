@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>展示页 · 山地浅层滑坡监测</title>
+  <meta name="description" content="实时展示压力数据并进行预警判定" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+  <header class="hero" style="background-image: url('./assets/images/image4.png');">
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <img class="hero__mark" src="./assets/images/image1.png" alt="项目标识" />
+      <h1>展示页 · 实时监测</h1>
+      <p>实时跟踪仪器压力数据 · 智能识别危险态势 · 自动预警</p>
+      <div class="hero__stats">
+        <div class="stat">
+          <div class="stat__label">当前压力</div>
+          <div class="stat__value" id="currentPressure">--</div>
+          <div class="stat__unit">kPa</div>
+        </div>
+        <div class="stat">
+          <div class="stat__label">变化速率</div>
+          <div class="stat__value" id="rate">--</div>
+          <div class="stat__unit">kPa/min</div>
+        </div>
+        <div class="stat">
+          <div class="stat__label">状态</div>
+          <div class="status-pill" id="statusPill">--</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel panel--chart">
+      <div class="panel__header">
+        <h2>压力数据实时曲线</h2>
+        <div class="connection">
+          <span class="dot dot--disconnected" id="connDot"></span>
+          <span id="connText">未连接（模拟）</span>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas id="pressureChart"></canvas>
+      </div>
+      <div class="legend">
+        <div class="legend__item"><span class="legend__swatch swatch--pressure"></span>压力</div>
+        <div class="legend__item"><span class="legend__swatch swatch--warn"></span>预警阈值</div>
+        <div class="legend__item"><span class="legend__swatch swatch--danger"></span>危险阈值</div>
+      </div>
+    </section>
+
+    <section class="layout-2">
+      <div class="panel">
+        <div class="panel__header">
+          <h2>阈值与判定</h2>
+        </div>
+        <div class="form">
+          <label class="form__row">
+            <span>预警阈值 (kPa)</span>
+            <input type="number" id="warnThreshold" step="0.1" value="80" />
+          </label>
+          <label class="form__row">
+            <span>危险阈值 (kPa)</span>
+            <input type="number" id="dangerThreshold" step="0.1" value="100" />
+          </label>
+          <label class="form__row">
+            <span>突变判定 Δ (kPa/min)</span>
+            <input type="number" id="rocThreshold" step="0.1" value="10" />
+          </label>
+          <label class="form__row">
+            <span>窗口大小 (点)</span>
+            <input type="number" id="windowSize" step="1" min="60" value="180" />
+          </label>
+          <div class="form__row">
+            <button id="resetBtn">重置数据</button>
+            <label class="toggle">
+              <input type="checkbox" id="alarmToggle" checked />
+              <span>启用报警</span>
+            </label>
+          </div>
+        </div>
+        <div class="explain">
+          <img src="./assets/images/image2.png" alt="监测示意" />
+          <p>判定规则：超过危险阈值或单位时间内变化速率超过阈值，视为危险；超过预警阈值视为预警。</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel__header">
+          <h2>告警记录</h2>
+          <button id="clearLogBtn" class="btn--ghost">清空</button>
+        </div>
+        <ul class="log" id="alarmLog"></ul>
+      </div>
+    </section>
+
+    <section class="panel" id="help" style="margin-top:18px">
+      <div class="panel__header">
+        <h2>数据表格</h2>
+        <div class="form" style="grid-template-columns:auto auto auto auto; gap:8px">
+          <label class="form__row" style="gap:6px">
+            <span>每页行数</span>
+            <input id="rowsPerPage" type="number" value="20" min="5" step="5" style="width:90px" />
+          </label>
+          <div class="form__row" style="gap:8px">
+            <button id="pagePrev" class="btn--ghost">上一页</button>
+            <button id="pageNext" class="btn--ghost">下一页</button>
+          </div>
+          <div class="form__row"><span id="pageInfo">第 1/1 页</span></div>
+          <a class="btn--ghost" href="./index.html">返回首页</a>
+        </div>
+      </div>
+      <div class="tableWrap">
+        <table class="dataTable">
+          <thead>
+            <tr>
+              <th>时间</th>
+              <th>压力 (kPa)</th>
+              <th>变化速率 (kPa/min)</th>
+            </tr>
+          </thead>
+          <tbody id="dataTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="alarm-banner" id="alarmBanner">
+    <img src="./assets/images/image3.png" alt="警报图标" />
+    <div class="alarm-banner__text">
+      <strong>危险！</strong> 检测到压力异常，已触发报警
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div>© 2026 山地浅层滑坡预防监测</div>
+    <div>界面参考自文档图片，视觉风格统一</div>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+
+</html>
