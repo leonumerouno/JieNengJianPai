@@ -156,15 +156,15 @@
         plugins: {
           legend: { display: false },
           tooltip: {
-            mode: 'index', intersect: false, backgroundColor: 'rgba(20,26,40,.95)'
+            mode: 'index', intersect: false, backgroundColor: 'rgba(255,255,255,.95)'
           }
         },
         scales: {
-          x: { ticks: { color: '#94a3b8', maxRotation: 0 }, grid: { color: 'rgba(148,163,184,.15)' } },
+          x: { ticks: { color: '#334155', maxRotation: 0 }, grid: { color: 'rgba(51,65,85,.15)' } },
           y: {
-            ticks: { color: '#94a3b8' },
-            grid: { color: 'rgba(148,163,184,.15)' },
-            title: { display: true, text: 'kPa', color: '#94a3b8' }
+            ticks: { color: '#334155' },
+            grid: { color: 'rgba(51,65,85,.15)' },
+            title: { display: true, text: 'kPa', color: '#334155' }
           }
         }
       }
@@ -188,11 +188,9 @@
     const w = PRESET.window
     const t = new Date()
     const last = state.points[state.points.length - 1] ?? state.base
-    // random walk with occasional spikes
     const spike = Math.random() < 0.02 ? (Math.random() * 25 + 10) : 0
     const drift = (Math.random() - 0.5) * 1.4
     let next = last + drift + (Math.random() < 0.03 ? -spike : 0) + (Math.random() < 0.03 ? spike : 0)
-    next = Math.max(0, next)
     state.points.push(next)
     state.timestamps.push(t.toLocaleTimeString())
     if (state.points.length > w) {
