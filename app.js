@@ -40,12 +40,13 @@
 
   function setConnection(on) {
     state.connected = on
-    connDot.classList.toggle('dot--connected', on)
-    connDot.classList.toggle('dot--disconnected', !on)
-    connText.textContent = on ? '已连接（模拟数据）' : '未连接（模拟）'
+    if (connDot) connDot.classList.toggle('dot--connected', on)
+    if (connDot) connDot.classList.toggle('dot--disconnected', !on)
+    if (connText) connText.textContent = on ? '已连接（模拟数据）' : '未连接（模拟）'
   }
 
   function addLog(level, msg) {
+    if (!log) return
     const li = document.createElement('li')
     const time = document.createElement('time')
     time.textContent = new Date().toLocaleString()
@@ -83,6 +84,7 @@
   }
 
   function updatePill(level) {
+    if (!pill) return
     pill.classList.remove('status-pill--ok', 'status-pill--warn', 'status-pill--danger')
     if (level === 'ok') {
       pill.textContent = '正常'
@@ -100,12 +102,12 @@
 
   function maybeAlarm(level, current) {
     if (level !== 'danger') {
-      alarmBanner.classList.remove('show')
+      if (alarmBanner) alarmBanner.classList.remove('show')
       return
     }
-    alarmBanner.classList.add('show')
+    if (alarmBanner) alarmBanner.classList.add('show')
     const now = Date.now()
-    if (inputs.alarmToggle.checked && now - state.lastAlarmAt > 1500) {
+    if (inputs.alarmToggle && inputs.alarmToggle.checked && now - state.lastAlarmAt > 1500) {
       state.lastAlarmAt = now
       addLog('danger', `压力值 ${fmt(current)} kPa 已达危险阈值`)
       beep()
@@ -199,8 +201,8 @@
     }
     const prev = state.points.length > 1 ? state.points[state.points.length - 2] : next
     const rate = (next - prev) / (0.5/60)
-    elCurr.textContent = fmt(next, 2)
-    elRate.textContent = fmt(rate, 1)
+    if (elCurr) elCurr.textContent = fmt(next, 2)
+    if (elRate) elRate.textContent = fmt(rate, 1)
     const level = classify(next)
     updatePill(level)
     maybeAlarm(level, next)
@@ -239,8 +241,8 @@
   function init() {
     setConnection(true)
     ensureChart()
-    inputs.resetBtn.addEventListener('click', resetData)
-    inputs.clearLogBtn.addEventListener('click', () => { log.innerHTML = '' })
+    if (inputs.resetBtn) inputs.resetBtn.addEventListener('click', resetData)
+    if (inputs.clearLogBtn) inputs.clearLogBtn.addEventListener('click', () => { if (log) log.innerHTML = '' })
     if (state.timer) clearInterval(state.timer)
     state.timer = setInterval(simulateTick, 500)
 
