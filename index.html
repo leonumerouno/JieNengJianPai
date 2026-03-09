@@ -1,10 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>山地浅层滑坡预防监测平台</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>山地滑坡预防监测平台</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -17,165 +17,439 @@
 
     body {
       font-family: 'Noto Sans SC', 'Microsoft Yahei', sans-serif;
-      background: linear-gradient(135deg, #eaf3ff 0%, #f7fbff 100%);
       min-height: 100vh;
-      color: #0f172a;
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+      background: #f0f8ff;
+      /* Fallback color */
     }
 
-    .home-container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 60px 24px;
+    /* Add a pseudo-element for a more detailed "landscape" effect if possible, but keep it simple for now */
+    body::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(to top, rgba(0, 50, 0, 0.4), transparent);
+      pointer-events: none;
     }
 
-    .logo-section {
-      text-align: center;
-      margin-bottom: 48px;
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
     }
 
-    .logo-section h1 {
-      font-size: 42px;
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .header-right {
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 6px 16px;
+      border-radius: 20px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Main Content */
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      padding-top: 40px;
+    }
+
+    .main-title {
+      font-size: 48px;
       font-weight: 700;
-      margin-bottom: 12px;
-      background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      background: linear-gradient(to bottom, #fff 0%, #e0e0e0 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
     }
 
-    .logo-section .subtitle {
+    .subtitle {
       font-size: 18px;
-      color: #8b949e;
-      letter-spacing: 2px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 40px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+      display: inline-block;
+      padding: 0 20px;
     }
 
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      margin-bottom: 48px;
+    .subtitle::before,
+    .subtitle::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 40px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.6);
     }
 
-    .card {
-      background: #ffffff;
-      border: 1px solid rgba(2, 6, 23, 0.08);
-      border-radius: 16px;
-      padding: 32px;
-      transition: transform 0.3s, box-shadow 0.3s;
+    .subtitle::before {
+      left: -30px;
     }
 
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    .subtitle::after {
+      right: -30px;
     }
 
-    .card-icon {
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(135deg, #238636, #2ea043);
+    /* Glass Card Container */
+    .glass-container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 24px;
+      padding: 40px;
+      width: 90%;
+      max-width: 1000px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .cards-wrapper {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Individual Cards */
+    .status-card {
+      flex: 1;
+      min-width: 260px;
       border-radius: 12px;
+      padding: 24px;
+      color: #333;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s;
+    }
+
+    .status-card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Card 1: Warning */
+    .card-warning {
+      background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+      border: 1px solid #FFE082;
+    }
+
+    .card-warning .icon-wrapper {
+      background: #FF9800;
+      color: white;
+    }
+
+    .card-warning .range-text {
+      color: #E65100;
+      font-weight: bold;
+      margin: 10px 0;
+      font-size: 18px;
+    }
+
+    .card-warning .card-title {
+      color: #BF360C;
+      font-weight: 700;
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .card-warning .card-sub {
+      color: #5D4037;
+      font-size: 14px;
+    }
+
+    /* Card 2: Sleep */
+    .card-sleep {
+      background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+      border: 1px solid #90CAF9;
+    }
+
+    .card-sleep .icon-wrapper {
+      background: #2196F3;
+      color: white;
+    }
+
+    .card-sleep .card-title {
+      color: #0D47A1;
+      font-weight: 700;
+      font-size: 22px;
+      margin: 10px 0 6px;
+    }
+
+    .card-sleep .card-sub {
+      color: #1565C0;
+      font-size: 14px;
+    }
+
+    /* Card 3: Confirm */
+    .card-confirm {
+      background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+      border: 1px solid #A5D6A7;
+    }
+
+    .card-confirm .icon-wrapper {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .card-confirm .card-title {
+      color: #1B5E20;
+      font-weight: 700;
+      font-size: 22px;
+      margin: 10px 0 6px;
+    }
+
+    .card-confirm .card-sub {
+      color: #2E7D32;
+      font-size: 14px;
+    }
+
+    /* Icons */
+    .icon-wrapper {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 20px;
       font-size: 24px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .card-icon.blue {
-      background: linear-gradient(135deg, #1f6feb, #388bfd);
-    }
-
-    .card h3 {
-      font-size: 20px;
-      margin-bottom: 12px;
-      color: #0f172a;
-    }
-
-    .card p {
-      font-size: 14px;
-      color: #475569;
-      line-height: 1.6;
-    }
-
-    .action-section {
-      text-align: center;
-    }
-
-    .btn-enter {
-      display: inline-block;
-      padding: 16px 48px;
-      font-size: 18px;
-      font-weight: 500;
-      color: #fff;
-      background: linear-gradient(90deg, #2563eb, #60a5fa);
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
+    /* Bottom Button */
+    .action-btn {
+      position: absolute;
+      bottom: -60px;
+      /* Position outside/below the glass container effectively, or inside at bottom right */
+      right: 0;
+      background: linear-gradient(90deg, #1565C0 0%, #42A5F5 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
       text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 8px 16px rgba(21, 101, 192, 0.3);
       transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .btn-enter:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35);
+    /* Adjust button position to be inside the glass container at bottom right as per image */
+    .glass-container .action-area {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 30px;
     }
 
-    .footer {
-      text-align: center;
-      padding: 40px 0;
-      color: #64748b;
-      font-size: 13px;
+    .action-btn {
+      position: static;
+      /* Reset absolute */
+      background: linear-gradient(90deg, #1976D2 0%, #2196F3 100%);
+      padding: 12px 30px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    @media (max-width: 600px) {
-      .logo-section h1 {
-        font-size: 28px;
-      }
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px rgba(21, 101, 192, 0.4);
+    }
 
-      .home-container {
-        padding: 40px 16px;
-      }
+    /* Background Image Placeholder */
+    /* Since I can't fetch the real image, I'll use a placeholder style that mimics a nature scene */
+    .bg-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center / cover;
+      /* Fallback if external image is blocked */
+      background-image: linear-gradient(to bottom, #7db9e8 0%, #1e5799 100%);
+    }
 
-      .card {
-        padding: 24px;
-      }
+    /* Better pure CSS landscape */
+    .css-landscape {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(180deg, #a1c4fd 0%, #c2e9fb 40%, #e0c3fc 40%, #8ec5fc 100%);
+      overflow: hidden;
+    }
+
+    .sky {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60%;
+      background: linear-gradient(180deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .mountain-bg {
+      position: absolute;
+      bottom: 25%;
+      left: 0;
+      width: 100%;
+      height: 40%;
+      background: linear-gradient(180deg, #43cea2 0%, #185a9d 100%);
+      clip-path: polygon(0% 100%, 20% 30%, 40% 80%, 60% 20%, 80% 90%, 100% 40%, 100% 100%);
+      opacity: 0.6;
+    }
+
+    .mountain-fg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 35%;
+      background: linear-gradient(180deg, #11998e 0%, #38ef7d 100%);
+      clip-path: polygon(0% 100%, 15% 40%, 35% 90%, 55% 20%, 75% 80%, 100% 30%, 100% 100%);
+      opacity: 0.8;
+    }
+
+    .water {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 20%;
+      background: linear-gradient(180deg, rgba(0, 198, 251, 0.5) 0%, rgba(0, 91, 234, 0.8) 100%);
+      backdrop-filter: blur(2px);
+      z-index: 0;
+    }
+
+    /* SVG Icons */
+    svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
     }
   </style>
 </head>
 
 <body>
-  <div class="home-container">
-    <div class="logo-section">
-      <h1>山地浅层滑坡预防监测平台</h1>
-      <p class="subtitle">实时监测 · 智能预警 · 安全保障</p>
-    </div>
 
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon blue">📊</div>
-        <h3>实时数据展示</h3>
-        <p>动态展示压力传感器数据，实时更新监测曲线，随时掌握山体状态变化。</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">⚠️</div>
-        <h3>智能预警系统</h3>
-        <p>基于压力阈值和变化速率的智能判定，自动触发预警和危险警报。</p>
-      </div>
-      <div class="card">
-        <div class="card-icon blue">📋</div>
-        <h3>历史数据查询</h3>
-        <p>完整记录监测数据，支持历史查询和导出，便于分析和存档。</p>
-      </div>
-    </div>
+  <!-- Background Layers -->
+  <div class="css-landscape">
+    <div class="sky"></div>
+    <div class="mountain-bg"></div>
+    <div class="mountain-fg"></div>
+    <div class="water"></div>
+    <!-- Overlay ref image if available for texture, low opacity -->
+    <img src="assets/images/ref.png"
+      style="position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0.15; mix-blend-mode: overlay; pointer-events: none;"
+      onerror="this.style.display='none'">
+  </div>
 
-    <div class="action-section">
-      <a href="./monitor.html" class="btn-enter">进入监测系统</a>
+  <div class="header">
+    <div class="header-left">
+      <div
+        style="width: 24px; height: 24px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #1976D2;">
+        ✔</div>
+      <span>陵亭/沉厄</span>
     </div>
-
-    <div class="footer">
-      <p>© 2026 山地浅层滑坡预防监测平台</p>
+    <div class="header-right">
+      <span>☁</span>
+      <span>设备名称： 达山陵 | LPQHZ01号</span>
     </div>
   </div>
+
+  <div class="main-container">
+    <h1 class="main-title">山地滑坡预防监测平台</h1>
+    <div class="subtitle">2米浅层监测 | 3米深层确认</div>
+
+    <div class="glass-container">
+      <div class="cards-wrapper">
+
+        <!-- Warning Card -->
+        <div class="status-card card-warning">
+          <div class="icon-wrapper">
+            <!-- Warning Triangle SVG -->
+            <svg viewBox="0 0 24 24">
+              <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" /></svg>
+          </div>
+          <div class="range-text">0.372-6.94 kPa</div>
+          <div class="card-title">边坡现状不稳定</div>
+          <div class="card-sub">需加强巡查</div>
+        </div>
+
+        <!-- Sleep Card -->
+        <div class="status-card card-sleep">
+          <div class="icon-wrapper">
+            <!-- Water Drop SVG -->
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8z" />
+            </svg>
+          </div>
+          <div class="card-title">休眠中</div>
+          <div class="card-sub">自动唤醒...<br>进一步确认无异常</div>
+        </div>
+
+        <!-- Confirm Card -->
+        <div class="status-card card-confirm">
+          <div class="icon-wrapper">
+            <!-- Check SVG -->
+            <svg viewBox="0 0 24 24">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+          </div>
+          <div class="card-title">待会确认中</div>
+          <div class="card-sub">深层监测后闭中...</div>
+        </div>
+
+      </div>
+
+      <div class="action-area">
+        <a href="monitor.html" class="action-btn">
+          3m探头 深层确认
+        </a>
+      </div>
+    </div>
+  </div>
+
 </body>
 
 </html>
