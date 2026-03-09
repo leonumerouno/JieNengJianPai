@@ -289,7 +289,6 @@
 
 <body>
   <div id="currentPressure" style="display:none;"></div>
-  <canvas id="pressureChart" style="display:none;"></canvas>
   <header class="page-header">
     <h1>山地滑坡预防监测平台</h1>
     <p>2米浅层监测 · 3米深层确认</p>
@@ -341,6 +340,14 @@
         <h3>危险</h3>
         <div class="range">&gt; 6.94 kPa</div>
         <p>土壤含水量过高，边坡失稳风险极高，需立即采取应急措施。</p>
+      </div>
+    </section>
+
+    <!-- 图表区域 -->
+    <section class="chart-section">
+      <h2>压力数据实时曲线</h2>
+      <div class="chart-container">
+        <canvas id="pressureChart"></canvas>
       </div>
     </section>
 
