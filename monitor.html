@@ -58,7 +58,44 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       display: flex;
       flex-direction: column;
+      align-items: center;
       justify-content: center;
+      text-align: center;
+    }
+
+    .probe-label {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .pressure-value {
+      font-size: 42px;
+      font-weight: 700;
+      color: #1e3a5f;
+      margin-bottom: 8px;
+    }
+
+    .pressure-status {
+      font-size: 16px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 20px;
+    }
+
+    .pressure-status.normal {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+
+    .pressure-status.warning {
+      background: #fef3c7;
+      color: #d97706;
+    }
+
+    .pressure-status.danger {
+      background: #fee2e2;
+      color: #dc2626;
     }
 
     .info-right {
@@ -251,19 +288,20 @@
 </head>
 
 <body>
+  <div id="currentPressure" style="display:none;"></div>
+  <canvas id="pressureChart" style="display:none;"></canvas>
   <header class="page-header">
     <h1>山地滑坡预防监测平台</h1>
     <p>2米浅层监测 · 3米深层确认</p>
   </header>
 
   <main class="main-content">
-    <!-- 第一行：左侧信息 + 右侧两个状态框 -->
+    <!-- 第一行：左侧压力数据 + 右侧两个状态框 -->
     <section class="info-section">
-      <div class="info-left">
-        <h3 style="margin: 0 0 12px 0; color: #1e3a5f; font-size: 18px;">设备信息</h3>
-        <p style="margin: 0 0 8px 0; color: #475569; font-size: 14px;">设备名称：达山陵</p>
-        <p style="margin: 0 0 8px 0; color: #475569; font-size: 14px;">设备编号：LPQHZ01号</p>
-        <p style="margin: 0; color: #475569; font-size: 14px;">监测深度：2米浅层 / 3米深层</p>
+      <div class="info-left" id="pressureBox">
+        <div class="probe-label">2m探头</div>
+        <div class="pressure-value" id="pressureValue">--</div>
+        <div class="pressure-status" id="pressureStatus">等待数据...</div>
       </div>
       <div class="info-right">
         <div class="status-card card-warning">
@@ -279,19 +317,11 @@
           <div class="icon-wrapper">
             <svg viewBox="0 0 24 24">
               <path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8z" />
-              </svg>
+            </svg>
           </div>
           <div class="card-title">休眠中</div>
           <div class="card-sub">自动唤醒...</div>
         </div>
-      </div>
-    </section>
-
-    <!-- 图表区域 -->
-    <section class="chart-section">
-      <h2>压力数据实时曲线</h2>
-      <div class="chart-container">
-        <canvas id="pressureChart"></canvas>
       </div>
     </section>
 
@@ -320,6 +350,38 @@
   </main>
 
   <script src="./app.js"></script>
+  <script>
+    (function () {
+      const pressureValue = document.getElementById('pressureValue');
+      const pressureStatus = document.getElementById('pressureStatus');
+      const currentPressureEl = document.getElementById('currentPressure');
+
+      function updatePressureDisplay() {
+        const text = currentPressureEl.textContent;
+        if (!text || text === '--') return;
+
+        const pressure = parseFloat(text);
+        if (isNaN(pressure)) return;
+
+        pressureValue.textContent = pressure.toFixed(2) + ' kPa';
+
+        pressureStatus.classList.remove('normal', 'warning', 'danger');
+
+        if (pressure > 6.94) {
+          pressureStatus.textContent = '危险';
+          pressureStatus.classList.add('danger');
+        } else if (pressure >= -0.372) {
+          pressureStatus.textContent = '预警';
+          pressureStatus.classList.add('warning');
+        } else {
+          pressureStatus.textContent = '正常';
+          pressureStatus.classList.add('normal');
+        }
+      }
+
+      setInterval(updatePressureDisplay, 500);
+    })();
+  </script>
 </body>
 
 </html>
