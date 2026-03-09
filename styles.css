@@ -440,3 +440,105 @@ body {
   border: 1px solid rgba(2, 6, 23, .08);
   border-radius: 10px
 }
+
+/* Status Cards for Monitor Page */
+.status-card {
+  flex: 1;
+  min-width: 200px;
+  border-radius: 12px;
+  padding: 20px;
+  color: #333;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.3s;
+}
+
+.status-card:hover {
+  transform: translateY(-3px);
+}
+
+.card-warning {
+  background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+  border: 1px solid #FFE082;
+}
+.card-warning .icon-wrapper {
+  background: #FF9800;
+  color: white;
+}
+.card-warning .range-text {
+  color: #E65100;
+  font-weight: bold;
+  margin: 8px 0;
+  font-size: 16px;
+}
+.card-warning .card-title {
+  color: #BF360C;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+.card-warning .card-sub {
+  color: #5D4037;
+  font-size: 13px;
+}
+
+.card-sleep {
+  background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+  border: 1px solid #90CAF9;
+}
+.card-sleep .icon-wrapper {
+  background: #2196F3;
+  color: white;
+}
+.card-sleep .card-title {
+  color: #0D47A1;
+  font-weight: 700;
+  font-size: 18px;
+  margin: 8px 0 4px;
+}
+.card-sleep .card-sub {
+  color: #1565C0;
+  font-size: 13px;
+}
+
+.card-confirm {
+  background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+  border: 1px solid #A5D6A7;
+}
+.card-confirm .icon-wrapper {
+  background: #4CAF50;
+  color: white;
+}
+.card-confirm .card-title {
+  color: #1B5E20;
+  font-weight: 700;
+  font-size: 18px;
+  margin: 8px 0 4px;
+}
+.card-confirm .card-sub {
+  color: #2E7D32;
+  font-size: 13px;
+}
+
+.icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.icon-wrapper svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
