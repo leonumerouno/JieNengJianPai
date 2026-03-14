@@ -4,6 +4,7 @@
 
   const elCurr = $('#currentPressure')
   const elRate = $('#rate')
+  const elCurr3m = $('#currentPressure3m')
   const pill = $('#statusPill')
   const connDot = $('#connDot')
   const connText = $('#connText')
@@ -35,7 +36,11 @@
     timer: null,
     chart: null,
     lastAlarmAt: 0,
-    page: { size: 20, index: 0 }
+    page: { size: 20, index: 0 },
+    points3m: [],
+    timestamps3m: [],
+    base3m: -2,
+    probe3mActive: false
   }
 
   function setConnection(on) {
@@ -97,6 +102,28 @@
       pill.classList.add('status-pill', 'status-pill--danger')
     } else {
       pill.textContent = '--'
+    }
+  }
+
+  function updatePill3m(level) {
+    const pill3m = document.getElementById('probe3mStatus')
+    const card3m = document.getElementById('probe3mCard')
+    if (!pill3m || !card3m) return
+    card3m.classList.remove('normal', 'warning', 'danger', 'sleep')
+    if (level === 'sleep') {
+      pill3m.textContent = '休眠中'
+      card3m.classList.add('sleep')
+    } else if (level === 'ok') {
+      pill3m.textContent = '正常'
+      card3m.classList.add('normal')
+    } else if (level === 'warn') {
+      pill3m.textContent = '预警'
+      card3m.classList.add('warning')
+    } else if (level === 'danger') {
+      pill3m.textContent = '危险'
+      card3m.classList.add('danger')
+    } else {
+      pill3m.textContent = '--'
     }
   }
 
@@ -206,6 +233,30 @@
     const level = classify(next)
     updatePill(level)
     maybeAlarm(level, next)
+    
+    if (level === 'warn' || level === 'danger') {
+      state.probe3mActive = true
+    }
+    
+    if (state.probe3mActive) {
+      const last3m = state.points3m[state.points3m.length - 1] ?? state.base3m
+      const spike3m = Math.random() < 0.02 ? (Math.random() * 25 + 10) : 0
+      const drift3m = (Math.random() - 0.5) * 1.4
+      let next3m = last3m + drift3m + (Math.random() < 0.03 ? -spike3m : 0) + (Math.random() < 0.03 ? spike3m : 0)
+      state.points3m.push(next3m)
+      state.timestamps3m.push(t.toLocaleTimeString())
+      if (state.points3m.length > w) {
+        state.points3m.shift()
+        state.timestamps3m.shift()
+      }
+      if (elCurr3m) elCurr3m.textContent = fmt(next3m, 2)
+      const level3m = classify(next3m)
+      updatePill3m(level3m)
+    } else {
+      if (elCurr3m) elCurr3m.textContent = '--'
+      updatePill3m('sleep')
+    }
+    
     recalcAndRender()
   }
 
