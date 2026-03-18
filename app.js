@@ -217,9 +217,10 @@
     const w = PRESET.window
     const t = new Date()
     const last = state.points[state.points.length - 1] ?? state.base
-    const spike = Math.random() < 0.02 ? (Math.random() * 25 + 10) : 0
-    const drift = (Math.random() - 0.5) * 1.4
-    let next = last + drift + (Math.random() < 0.03 ? -spike : 0) + (Math.random() < 0.03 ? spike : 0)
+    const spike = Math.random() < 0.15 ? (Math.random() * 30 + 15) : 0
+    const drift = (Math.random() - 0.3) * 2.5
+    let next = last + drift + (Math.random() < 0.1 ? -spike : 0) + (Math.random() < 0.15 ? spike : 0)
+    if (next < -10) next = -10 + Math.random() * 3
     state.points.push(next)
     state.timestamps.push(t.toLocaleTimeString())
     if (state.points.length > w) {
@@ -240,9 +241,10 @@
     
     if (state.probe3mActive) {
       const last3m = state.points3m[state.points3m.length - 1] ?? state.base3m
-      const spike3m = Math.random() < 0.02 ? (Math.random() * 25 + 10) : 0
-      const drift3m = (Math.random() - 0.5) * 1.4
-      let next3m = last3m + drift3m + (Math.random() < 0.03 ? -spike3m : 0) + (Math.random() < 0.03 ? spike3m : 0)
+      const spike3m = Math.random() < 0.2 ? (Math.random() * 35 + 20) : 0
+      const drift3m = (Math.random() - 0.25) * 3
+      let next3m = last3m + drift3m + (Math.random() < 0.1 ? -spike3m : 0) + (Math.random() < 0.2 ? spike3m : 0)
+      if (next3m < -10) next3m = -10 + Math.random() * 3
       state.points3m.push(next3m)
       state.timestamps3m.push(t.toLocaleTimeString())
       if (state.points3m.length > w) {
